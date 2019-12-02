@@ -1,4 +1,4 @@
-# Fibonacci Runtime Analyzer
+# Spellchecker
 
 ## [Introduction]
 	
@@ -10,25 +10,26 @@ java program ever to hit the internet!
 that will be meticulously scanned for alphabetical errors! Errors 
 will then be presented one at a time to decide on a proper editing 
 choice. Finally, the prompt to save your changes to your text file
-will appearfor exporting the changes. 
+will appear for exporting the changes. 
 
 
 ## [Technical Details]
--
+- Currently only able to detect missplelled words and show a textfield
+  for replacing said words.
 
 Future improvements include:
 #### Important
- -
+ - Get the skip and replace functions workign properly. 
 	
  #### Ideally would be nice:
- -
+ - Offering Suggestions for misspelled words
  
 
 The program is written in Java and uses all the standard Java libries.
 
 ## [Instructions]
-	
-Run the .jar file in order to start the program. 
+Currently must be compiled in an IDE.
+Eventually an export will be made!!
 
 	
 ## [Github Links]
