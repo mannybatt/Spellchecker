@@ -3,6 +3,7 @@ package SpellcheckerPackage;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -39,9 +40,11 @@ public class Spellchecker extends Application {
     static Button replaceButton;
     private static String word = "";
     static int j = 0;
-    boolean doneWithFile = false;
     static Dictionary dictionary;
-    String dictionaryPath = "C:\\Users\\Manny\\IdeaProjects\\Spellchecker\\src\\SpellcheckerPackage\\AllOfTheWords.txt";
+    String dictionaryPath = "AllOfTheWords.txt";
+    static ArrayList<String> errors = new ArrayList<String>();
+    static ArrayList<Integer> places = new ArrayList<Integer>();
+    static ArrayList<String> fixedWords = new ArrayList<String>();
 
 
     @Override
@@ -116,12 +119,10 @@ public class Spellchecker extends Application {
     }
 
 
-    private static void documentImport(File file) {
+    public static void documentImport(File file) {
 
         Dictionary documentWords = new Hashtable<String, Integer>();
-        ArrayList<String> errors = new ArrayList<String>();
-        ArrayList<Integer> places = new ArrayList<Integer>();
-        ArrayList<String> fixedWords = new ArrayList<String>();
+
         Scanner scan = null;
         int counter = 0;
         int wordCount = 0;
@@ -131,8 +132,6 @@ public class Spellchecker extends Application {
         } catch (FileNotFoundException e) {
             System.out.println("File Not Found!");
         }
-
-        //Scene spellingErrorScene;
 
         if (scan.hasNext()) {     //Checks for Empty file
             while (scan.hasNext()) {          //Iterate document once and find all errors & places
@@ -151,9 +150,16 @@ public class Spellchecker extends Application {
         Iterator<String> errorIterator = errors.iterator();
         Iterator<Integer> placesIterator = places.iterator();
 
+        int z=0;
+        while(z<errors.size()){
+            buttonDoer(errorIterator, placesIterator);
+            z++;
+        }
+    }
+
+    private static void buttonDoer(Iterator<String> errorIterator, Iterator<Integer> placesIterator) {
         word = errorIterator.next();
         placesIterator.next();
-        //fixedWords.add(wordExamination(word));
 
         Text seTitle = new Text("Spelling Errors");
         seTitle.setFont(Font.font("Bell MT", 24));
@@ -167,7 +173,13 @@ public class Spellchecker extends Application {
         errorText.setFont(Font.font("Bell MT", 22));
         errorText.setFill(Color.DARKRED);
 
-        TextField updateField = new TextField("Type a replacement");
+        TextField updateField = new TextField(word);
+
+        Button nextButton = new Button("Next");
+        nextButton.setOnAction(e -> {
+            fixedWords.add(updateField.getText());
+            buttonDoer(errorIterator, placesIterator);
+        });
 
         VBox replaceLayout = new VBox(5);
         replaceLayout.setAlignment(Pos.CENTER);
@@ -175,86 +187,11 @@ public class Spellchecker extends Application {
         replaceLayout.getChildren().add(info);
         replaceLayout.getChildren().add(errorText);
         replaceLayout.getChildren().add(updateField);
-        //replaceLayout.getChildren().add(replaceButton);
-        //replaceLayout.getChildren().add(skipButton);
+        replaceLayout.getChildren().add(nextButton);
 
         Scene secondScene = new Scene(replaceLayout, 550, 550);
-
-
-
-
-        replaceButton = new Button("Replace");
-        replaceButton.setOnAction(e -> {
-            fixedWords.add(updateField.getText());
-
-            updateWord(errorIterator.next());
-
-            placesIterator.next();
-            //fixedWords.add(wordExamination(word));
-
-            Text sTitle = new Text("Spelling Errors");
-            seTitle.setFont(Font.font("Bell MT", 24));
-            seTitle.setFill(Color.PURPLE);
-
-            Text nfo = new Text("The following words have been found to be misspelled.\nChose your actions bellow");
-            info.setFont(Font.font("Bell MT", 18));
-            info.setFill(Color.GRAY);
-
-            Text eText = new Text(word);
-            errorText.setFont(Font.font("Bell MT", 22));
-            errorText.setFill(Color.DARKRED);
-
-            TextField uField = new TextField("Type a replacement");
-
-            VBox rLayout = new VBox(5);
-            rLayout.setAlignment(Pos.CENTER);
-            rLayout.getChildren().add(sTitle);
-            rLayout.getChildren().add(nfo);
-            rLayout.getChildren().add(eText);
-            rLayout.getChildren().add(uField);
-            //rLayout.getChildren().add(replaceButton);
-            //rLayout.getChildren().add(skipButton);
-
-            secondStage.setScene(secondScene);
-            //secondStage.show();
-        });
-
-        skipButton = new Button("Skip");
-        skipButton.setOnAction(e -> {
-            fixedWords.add(word);
-
-            updateWord(errorIterator.next());
-            placesIterator.next();
-
-            Text sTitle = new Text("Spelling Errors");
-            seTitle.setFont(Font.font("Bell MT", 24));
-            seTitle.setFill(Color.PURPLE);
-
-            Text nfo = new Text("The following words have been found to be misspelled.\nChose your actions bellow");
-            info.setFont(Font.font("Bell MT", 18));
-            info.setFill(Color.GRAY);
-
-            Text eText = new Text(word);
-            errorText.setFont(Font.font("Bell MT", 22));
-            errorText.setFill(Color.DARKRED);
-
-            TextField uField = new TextField("Type a replacement");
-
-            VBox rLayout = new VBox(5);
-            rLayout.setAlignment(Pos.CENTER);
-            rLayout.getChildren().add(sTitle);
-            rLayout.getChildren().add(nfo);
-            rLayout.getChildren().add(eText);
-            rLayout.getChildren().add(uField);
-            //rLayout.getChildren().add(replaceButton);
-            //rLayout.getChildren().add(skipButton);
-
-            secondStage.setScene(secondScene);
-            secondStage.show();
-        });
         secondStage.setScene(secondScene);
         secondStage.show();
-
     }
 
     private static void updateWord(String next) {
@@ -264,5 +201,4 @@ public class Spellchecker extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }
